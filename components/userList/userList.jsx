@@ -18,33 +18,17 @@ class UserList extends React.Component {
     super(props);
   }
 
-//   timelineData.map(achieve => ( 
-//     <div className="achievement-cards" key={achieve.id} >
-//         <TimelineCard 
-//             id={achieve.id}
-//             key={achieve.id}
-//             company={achieve.company}
-//             role={achieve.role}
-//             timeLine={achieve.timeLine}
-//             details={achieve.details}
-//             image={achieve.image}/>
-//     </div>
-// ))
-
   render() {
 
     let listOfUsers = window.cs142models.userListModel();
-    console.log(listOfUsers[0].first_name);
 
     let arrayOfUserNames = listOfUsers.map(user => {
       return(
       <ListItem key={user._id}>
-        <Link to={'components/userList/'}>{user.first_name + " " + user.last_name}</Link>
+        <Link to={'/users/' + user._id}>{user.first_name + " " + user.last_name}</Link>
       </ListItem>
       )
     });
-
-    console.log(arrayOfUserNames);
 
     return (
       <div>

@@ -3,6 +3,7 @@ import {
   Typography
 } from '@material-ui/core';
 import './userDetail.css';
+import userPhotos from '../userPhotos/userPhotos';
 
 
 /**
@@ -14,6 +15,8 @@ class UserDetail extends React.Component {
   }
 
   render() {
+    let users = window.cs142models.userListModel();
+    console.log('hello');
     return (
       <Typography variant="body1">
         This should be the UserDetail view of the PhotoShare app. Since
