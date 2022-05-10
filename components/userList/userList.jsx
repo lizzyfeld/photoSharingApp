@@ -38,10 +38,9 @@ class UserList extends React.Component {
 
     let arrayOfUserNames = listOfUsers.map(user => {
       return(
-      <ListItem key={user._id} component={Link}>
-        <ListItemText primary={user.first_name} />
+      <ListItem key={user._id}>
+        <Link to={'components/userList/'}>{user.first_name + " " + user.last_name}</Link>
       </ListItem>
-      // <Text>{user.first_name}</Text>
       )
     });
 
@@ -57,9 +56,9 @@ class UserList extends React.Component {
         <List component="nav">
           {arrayOfUserNames}
         </List>
-        <Typography variant="body1">
+        {/* <Typography variant="body1">
           The model comes in from window.cs142models.userListModel()
-        </Typography>
+        </Typography> */}
       </div>
     );
   }
