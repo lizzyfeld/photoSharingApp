@@ -19,9 +19,7 @@ class UserList extends React.Component {
   }
 
   render() {
-
     let listOfUsers = window.cs142models.userListModel();
-
     let arrayOfUserNames = listOfUsers.map(user => {
       return(
       <ListItem key={user._id}>
@@ -32,17 +30,9 @@ class UserList extends React.Component {
 
     return (
       <div>
-        <Typography variant="body1">
-          This is the user list, which takes up 3/12 of the window.
-          You might choose to use <a href="https://mui.com/components/lists/">Lists</a> and <a href="https://mui.com/components/dividers/">Dividers</a> to
-          display your users like so:
-        </Typography>
         <List component="nav">
           {arrayOfUserNames}
         </List>
-        {/* <Typography variant="body1">
-          The model comes in from window.cs142models.userListModel()
-        </Typography> */}
       </div>
     );
   }
