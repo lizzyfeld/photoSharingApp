@@ -3,6 +3,8 @@ import {
   Typography
 } from '@material-ui/core';
 import './userPhotos.css';
+import { ListItem }from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 
 /**
@@ -15,16 +17,37 @@ class UserPhotos extends React.Component {
   }
 
   render() {
+    let userID = this.props.match.params.userId;
+    let listOfPhotos = window.cs142models.photoOfUserModel(userID);
+    let arrayOfUserPhotos = listOfPhotos.map(photo => {
+      var imagePath = 'images/' + photo.file_name;
+      const hasComments = photo.comments !== undefined && photo.comments.length > 0;
+        return(
+          <div key={photo._id}>
+            <div>Date posted: {photo.date_time}</div>
+            <img src={imagePath}/>
+            {hasComments &&
+              <div>
+                {photo.comments.map(comment => {
+                  var linkToUser = "http://localhost:3000/photo-share.html#/users/" + comment.user._id;
+                  console.log(comment.user);
+                  console.log(linkToUser);
+                  var user = comment.user.first_name;
+                  return (
+                    <div key={comment._id}>
+                      {comment.date_time}<br></br>
+                      <Link to={linkToUser}>{user}: </Link>{comment.comment}
+                    </div>
+                )})}
+              </div>
+            }
+          </div>
+        )
+    });
+
     return (
-      <Typography variant="body1">
-      This should be the UserPhotos view of the PhotoShare app. Since
-      it is invoked from React Router the params from the route will be
-      in property match. So this should show details of user:
-      {this.props.match.params.userId}. You can fetch the model for the user from
-      window.cs142models.photoOfUserModel(userId):
-        <Typography variant="caption">
-          {JSON.stringify(window.cs142models.photoOfUserModel(this.props.match.params.userId))}
-        </Typography>
+      <Typography component={'span'} variant="body1">
+        {arrayOfUserPhotos}
       </Typography>
 
     );

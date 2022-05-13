@@ -25,14 +25,14 @@
  * cs142Models.photoOfUserModel - A function that returns the photos belong to
  * the specified user. Called  with an user ID (id), the function returns an object containing:
  *   _id  (string) - The ID of the photo
- *   date_time (date) - he date and time the picture was taken in ISO format.
+ *   date_time (date) - the date and time the picture was taken in ISO format.
  *   file_name (string) - The file name in the image directory of the picture.
  *   user_id (string) - The user id of the picture's owner.
  *   comments: {array of objects} - An array of comment objects containing the properties:
  *        _id  (string) - The ID of the comment.
  *        date_time (date) - The date the comment was made in ISO format.
  *        comment (string) - The text of the comment.
- *        user: {object} The user info (see userMode for format) who made the comment
+ *        user: {object} The user info (see userModel for format) who made the comment
  *        photo_id: (string) - The ID of the photo the comment belongs to.
  *
  * cs142Models.schemaModel - A function that returns the test info from the fake schema.
