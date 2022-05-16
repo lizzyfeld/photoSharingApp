@@ -13,16 +13,27 @@ import { Link } from 'react-router-dom';
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {posts: []}
   }
 
   componentDidMount() {
     this.props.setName(this.props.match.params.userId, true);
+    var xhttp = new XMLHttpRequest();
+    var self = this;
+    
+    xhttp.onreadystatechange = function(e){
+      if (xhttp.readyState === 4 && xhttp.status === 200){
+        self.setState({
+          posts: JSON.parse(this.response)
+        });
+      }
+    }
+    xhttp.open("get", "/photosOfUser/" + this.props.match.params.userId, true);
+    xhttp.send();
   }
 
   render() {
-    let userID = this.props.match.params.userId;
-    let listOfPhotos = window.cs142models.photoOfUserModel(userID);
+    let listOfPhotos = this.state.posts;
     let arrayOfUserPhotos = listOfPhotos.map(photo => {
       var imagePath = 'images/' + photo.file_name;
       const hasComments = photo.comments !== undefined && photo.comments.length > 0;

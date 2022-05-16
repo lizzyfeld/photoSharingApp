@@ -26,7 +26,7 @@ class PhotoShare extends React.Component {
     let user = window.cs142models.userModel(newName);
     if (showPhotos) {
       this.setState({
-        name: user.first_name + " " + user.last_name + " " + "Photos",
+        name: user.first_name + " " + user.last_name + "'s " + "Photos",
       });
     } else {
       this.setState({

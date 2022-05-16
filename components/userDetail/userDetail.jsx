@@ -12,15 +12,28 @@ import { Link } from 'react-router-dom';
 class UserDetail extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {posts: {}}
   }
 
-  // called whenever the page refreshes
+   // called whenever the page refreshes
   componentDidMount() {
     this.props.setName(this.props.match.params.userId)
+    var xhttp = new XMLHttpRequest();
+    var self = this;
+    
+    xhttp.onreadystatechange = function(e){
+      if (xhttp.readyState === 4 && xhttp.status === 200){
+        self.setState({
+          posts: JSON.parse(this.response)
+        });
+      }
+    }
+    xhttp.open("get", "/user/" + this.props.match.params.userId, true);
+    xhttp.send();
   }
 
   render() {
-    let user = window.cs142models.userModel(this.props.match.params.userId);
+    let user = this.state.posts;
     return (
       <div>
         <h1>{user.first_name} {user.last_name}</h1>

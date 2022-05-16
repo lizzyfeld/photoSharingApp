@@ -17,7 +17,7 @@ class TopBar extends React.Component {
     // console.log(user);
     return (
       <AppBar className="cs142-topbar-appBar" position="absolute">
-        <Toolbar>
+        <Toolbar style={{justifyContent: 'space-between'}}>
           <Typography variant="h5" color="inherit">
               Liz
           </Typography>
