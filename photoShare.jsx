@@ -17,20 +17,37 @@ import UserPhotos from './components/userPhotos/userPhotos';
 class PhotoShare extends React.Component {
   constructor(props) {
     super(props);
+    this.state ={
+      name: '',
+    };
+  }
+
+  setName = (newName, showPhotos) => {
+    let user = window.cs142models.userModel(newName);
+    if (showPhotos) {
+      this.setState({
+        name: user.first_name + " " + user.last_name + " " + "Photos",
+      });
+    } else {
+      this.setState({
+      name: user.first_name + " " + user.last_name,
+    });
+    }
   }
 
   render() {
+    console.log(this.state);
     return (
       <HashRouter>
       <div>
       <Grid container spacing={8}>
         <Grid item xs={12}>
-          <TopBar/>
+          <TopBar name={this.state.name}/>
         </Grid>
         <div className="cs142-main-topbar-buffer"/>
         <Grid item sm={3}>
           <Paper className="cs142-main-grid-item">
-            <UserList />
+            <UserList setName={this.setName} />
           </Paper>
         </Grid>
         <Grid item sm={9}>
@@ -49,10 +66,10 @@ class PhotoShare extends React.Component {
                 )}
               />
               <Route path="/users/:userId"
-                render={ props => <UserDetail {...props} /> }
+                render={ props => <UserDetail {...props} setName={this.setName} /> }
               />
               <Route path="/photos/:userId"
-                render ={ props => <UserPhotos {...props} /> }
+                render ={ props => <UserPhotos {...props} setName={this.setName} /> }
               />
               <Route path="/users" component={UserList}  />
             </Switch>

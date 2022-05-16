@@ -23,7 +23,7 @@ class UserList extends React.Component {
     let arrayOfUserNames = listOfUsers.map(user => {
       return(
       <ListItem key={user._id}>
-        <Link to={'/users/' + user._id}>{user.first_name + " " + user.last_name}</Link>
+        <Link onClick={() => this.props.setName(user._id)} to={'/users/' + user._id}>{user.first_name + " " + user.last_name}</Link>
       </ListItem>
       )
     });

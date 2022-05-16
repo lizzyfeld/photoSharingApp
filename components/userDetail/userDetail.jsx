@@ -14,6 +14,11 @@ class UserDetail extends React.Component {
     super(props);
   }
 
+  // called whenever the page refreshes
+  componentDidMount() {
+    this.props.setName(this.props.match.params.userId)
+  }
+
   render() {
     let user = window.cs142models.userModel(this.props.match.params.userId);
     return (

@@ -16,6 +16,10 @@ class UserPhotos extends React.Component {
 
   }
 
+  componentDidMount() {
+    this.props.setName(this.props.match.params.userId, true);
+  }
+
   render() {
     let userID = this.props.match.params.userId;
     let listOfPhotos = window.cs142models.photoOfUserModel(userID);
@@ -30,13 +34,11 @@ class UserPhotos extends React.Component {
               <div>
                 {photo.comments.map(comment => {
                   var linkToUser = "http://localhost:3000/photo-share.html#/users/" + comment.user._id;
-                  console.log(comment.user);
-                  console.log(linkToUser);
-                  var user = comment.user.first_name;
+                  var userName = comment.user.first_name;
                   return (
                     <div key={comment._id}>
                       {comment.date_time}<br></br>
-                      <Link to={linkToUser}>{user}: </Link>{comment.comment}
+                      <Link to={linkToUser}>{userName}: </Link>{comment.comment}
                     </div>
                 )})}
               </div>
