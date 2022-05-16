@@ -44,7 +44,7 @@ class UserPhotos extends React.Component {
             {hasComments &&
               <div>
                 {photo.comments.map(comment => {
-                  var linkToUser = "http://localhost:3000/photo-share.html#/users/" + comment.user._id;
+                  var linkToUser = "/users/" + comment.user._id;
                   var userName = comment.user.first_name;
                   return (
                     <div key={comment._id}>
