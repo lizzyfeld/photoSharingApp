@@ -13,13 +13,11 @@ class TopBar extends React.Component {
   }
 
   render() {
-    // const user = window.cs142models.userModel(this.props.match.params.userId);
-    // console.log(user);
     return (
       <AppBar className="cs142-topbar-appBar" position="absolute">
         <Toolbar style={{justifyContent: 'space-between'}}>
           <Typography variant="h5" color="inherit">
-              Liz
+              Liz Feldman
           </Typography>
           <Typography variant="h5" color="inherit">
               {this.props.name}

@@ -3,7 +3,6 @@ import {
   Typography
 } from '@material-ui/core';
 import './userPhotos.css';
-import { ListItem }from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 
@@ -21,13 +20,13 @@ class UserPhotos extends React.Component {
     var xhttp = new XMLHttpRequest();
     var self = this;
     
-    xhttp.onreadystatechange = function(e){
+    xhttp.onreadystatechange = function(){
       if (xhttp.readyState === 4 && xhttp.status === 200){
         self.setState({
           posts: JSON.parse(this.response)
         });
       }
-    }
+    };
     xhttp.open("get", "/photosOfUser/" + this.props.match.params.userId, true);
     xhttp.send();
   }
@@ -41,7 +40,7 @@ class UserPhotos extends React.Component {
           <div key={photo._id}>
             <div>Date posted: {photo.date_time}</div>
             <img src={imagePath}/>
-            {hasComments &&
+            {hasComments && 
               <div>
                 {photo.comments.map(comment => {
                   var linkToUser = "/users/" + comment.user._id;
@@ -51,11 +50,10 @@ class UserPhotos extends React.Component {
                       {comment.date_time}<br></br>
                       <Link to={linkToUser}>{userName}: </Link>{comment.comment}
                     </div>
-                )})}
-              </div>
-            }
+                );})};
+              </div>}
           </div>
-        )
+        );
     });
 
     return (
