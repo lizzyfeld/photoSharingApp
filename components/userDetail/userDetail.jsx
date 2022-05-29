@@ -16,7 +16,7 @@ class UserDetail extends React.Component {
     const promise = fetchModel(`/user/${this.props.match.params.userId}`);
     promise.then((response => {
         this.setState({userDetails: JSON.parse(response.data)});
-        this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
+        // this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
     })).catch(function(error) {
       console.log(error);
     });
@@ -28,7 +28,7 @@ class UserDetail extends React.Component {
       const promise = fetchModel(`/user/${this.props.match.params.userId}`);
       promise.then((response => {
           this.setState({userDetails: JSON.parse(response.data)});
-          this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
+          // this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
       })).catch(function(error) {
         console.log(error);
       });

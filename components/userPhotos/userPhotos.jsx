@@ -19,55 +19,23 @@ class UserPhotos extends React.Component {
     const promise = fetchModel(`/photosOfUser/${this.props.match.params.userId}`);
       promise.then((response => {
         this.setState({photos: JSON.parse(response.data)});
-        this.props.callback("userPhotos");
+        // this.props.callback("userPhotos");
       })).catch(function(error) {
         console.log(error);
       });
   }
-
-  // componentDidMount() {
-  //   this.props.setName(this.props.match.params.userId, true);
-  //   var xhttp = new XMLHttpRequest();
-  //   var self = this;
-    
-  //   xhttp.onreadystatechange = function(){
-  //     if (xhttp.readyState === 4 && xhttp.status === 200){
-  //       self.setState({
-  //         posts: JSON.parse(this.response)
-  //       });
-  //     }
-  //   };
-  //   xhttp.open("get", "/photosOfUser/" + this.props.match.params.userId, true);
-  //   xhttp.send();
-  // }
 
   componentDidUpdate = (prevProps) => {
     if (prevProps.match.params.userId !== this.props.match.params.userId){
       const promise = fetchModel(`/photosOfUser/${this.props.match.params.userId}`);
       promise.then((response => {
         this.setState({photos: JSON.parse(response.data)});
-        this.props.callback("userPhotos");
+        // this.props.callback("userPhotos");
       })).catch(function(error) {
         console.log(error);
       });
     }
   };
-
-  // componentDidMount = () => {
-  //   this.props.callback("userPhotos");
-  // };
-
-  // componentDidUpdate = (prevProps) => {
-  //   if (prevProps.match.params.userId !== this.props.match.params.userId) {
-  //     const promise = fetchModel(`/user/${this.props.match.params.userId}`);
-  //     promise.then((response => {
-  //         this.setState({userDetails: JSON.parse(response.data)});
-  //         this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
-  //     })).catch(function(error) {
-  //       console.log(error);
-  //     });
-  //   }
-  // }
 
   render() {
     let listOfPhotos = this.state.photos;
