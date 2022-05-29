@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 import './userPhotos.css';
 import { Link } from 'react-router-dom';
+import fetchModel from '../../lib/fetchModelData';
 
 
 /**
@@ -12,27 +13,64 @@ import { Link } from 'react-router-dom';
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {posts: []}
+    this.state = {
+      photos: []
+    }
+    const promise = fetchModel(`/photosOfUser/${this.props.match.params.userId}`);
+      promise.then((response => {
+        this.setState({photos: JSON.parse(response.data)});
+        this.props.callback("userPhotos");
+      })).catch(function(error) {
+        console.log(error);
+      });
   }
 
-  componentDidMount() {
-    this.props.setName(this.props.match.params.userId, true);
-    var xhttp = new XMLHttpRequest();
-    var self = this;
+  // componentDidMount() {
+  //   this.props.setName(this.props.match.params.userId, true);
+  //   var xhttp = new XMLHttpRequest();
+  //   var self = this;
     
-    xhttp.onreadystatechange = function(){
-      if (xhttp.readyState === 4 && xhttp.status === 200){
-        self.setState({
-          posts: JSON.parse(this.response)
-        });
-      }
-    };
-    xhttp.open("get", "/photosOfUser/" + this.props.match.params.userId, true);
-    xhttp.send();
-  }
+  //   xhttp.onreadystatechange = function(){
+  //     if (xhttp.readyState === 4 && xhttp.status === 200){
+  //       self.setState({
+  //         posts: JSON.parse(this.response)
+  //       });
+  //     }
+  //   };
+  //   xhttp.open("get", "/photosOfUser/" + this.props.match.params.userId, true);
+  //   xhttp.send();
+  // }
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.match.params.userId !== this.props.match.params.userId){
+      const promise = fetchModel(`/photosOfUser/${this.props.match.params.userId}`);
+      promise.then((response => {
+        this.setState({photos: JSON.parse(response.data)});
+        this.props.callback("userPhotos");
+      })).catch(function(error) {
+        console.log(error);
+      });
+    }
+  };
+
+  // componentDidMount = () => {
+  //   this.props.callback("userPhotos");
+  // };
+
+  // componentDidUpdate = (prevProps) => {
+  //   if (prevProps.match.params.userId !== this.props.match.params.userId) {
+  //     const promise = fetchModel(`/user/${this.props.match.params.userId}`);
+  //     promise.then((response => {
+  //         this.setState({userDetails: JSON.parse(response.data)});
+  //         this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
+  //     })).catch(function(error) {
+  //       console.log(error);
+  //     });
+  //   }
+  // }
 
   render() {
-    let listOfPhotos = this.state.posts;
+    let listOfPhotos = this.state.photos;
     let arrayOfUserPhotos = listOfPhotos.map(photo => {
       var imagePath = 'images/' + photo.file_name;
       const hasComments = photo.comments !== undefined && photo.comments.length > 0;
@@ -60,7 +98,6 @@ class UserPhotos extends React.Component {
       <Typography component={'span'} variant="body1">
         {arrayOfUserPhotos}
       </Typography>
-
     );
   }
 }
