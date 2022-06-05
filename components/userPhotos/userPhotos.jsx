@@ -3,8 +3,8 @@ import {
   Typography
 } from '@material-ui/core';
 import './userPhotos.css';
-import { ListItem }from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import fetchModel from '../../lib/fetchModelData';
 
 
 /**
@@ -13,27 +13,32 @@ import { Link } from 'react-router-dom';
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {posts: []}
+    this.state = {
+      photos: []
+    }
+    const promise = fetchModel(`/photosOfUser/${this.props.match.params.userId}`);
+      promise.then((response => {
+        this.setState({photos: JSON.parse(response.data)});
+        // this.props.callback("userPhotos");
+      })).catch(function(error) {
+        console.log(error);
+      });
   }
 
-  componentDidMount() {
-    this.props.setName(this.props.match.params.userId, true);
-    var xhttp = new XMLHttpRequest();
-    var self = this;
-    
-    xhttp.onreadystatechange = function(e){
-      if (xhttp.readyState === 4 && xhttp.status === 200){
-        self.setState({
-          posts: JSON.parse(this.response)
-        });
-      }
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.match.params.userId !== this.props.match.params.userId){
+      const promise = fetchModel(`/photosOfUser/${this.props.match.params.userId}`);
+      promise.then((response => {
+        this.setState({photos: JSON.parse(response.data)});
+        // this.props.callback("userPhotos");
+      })).catch(function(error) {
+        console.log(error);
+      });
     }
-    xhttp.open("get", "/photosOfUser/" + this.props.match.params.userId, true);
-    xhttp.send();
-  }
+  };
 
   render() {
-    let listOfPhotos = this.state.posts;
+    let listOfPhotos = this.state.photos;
     let arrayOfUserPhotos = listOfPhotos.map(photo => {
       var imagePath = 'images/' + photo.file_name;
       const hasComments = photo.comments !== undefined && photo.comments.length > 0;
@@ -41,7 +46,7 @@ class UserPhotos extends React.Component {
           <div key={photo._id}>
             <div>Date posted: {photo.date_time}</div>
             <img src={imagePath}/>
-            {hasComments &&
+            {hasComments && 
               <div>
                 {photo.comments.map(comment => {
                   var linkToUser = "/users/" + comment.user._id;
@@ -51,18 +56,16 @@ class UserPhotos extends React.Component {
                       {comment.date_time}<br></br>
                       <Link to={linkToUser}>{userName}: </Link>{comment.comment}
                     </div>
-                )})}
-              </div>
-            }
+                );})};
+              </div>}
           </div>
-        )
+        );
     });
 
     return (
       <Typography component={'span'} variant="body1">
         {arrayOfUserPhotos}
       </Typography>
-
     );
   }
 }
