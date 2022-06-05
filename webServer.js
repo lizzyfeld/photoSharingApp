@@ -98,9 +98,9 @@ app.get('/test/:p1', function (request, response) {
         // do the work.  We put the collections into array and use async.each to
         // do each .count() query.
         var collections = [
-            {name: 'user', collection: User},
-            {name: 'photo', collection: Photo},
-            {name: 'schemaInfo', collection: SchemaInfo}
+            { name: 'user', collection: User },
+            { name: 'photo', collection: Photo },
+            { name: 'schemaInfo', collection: SchemaInfo }
         ];
         async.each(collections, function (col, done_callback) {
             col.collection.countDocuments({}, function (err, count) {
@@ -131,14 +131,14 @@ app.get('/user/list', function (request, response) {
     let query = User.find({});
     query.select('_id first_name last_name');
     query.exec(function (err, userInfo) {
-            if (err) {
-                console.error('Doing /user/info error:', err);
-                response.status(400).send(JSON.stringify(err));
-                return;
-            }
-            // console.log('User List ', userInfo);
-            response.status(200).send(userInfo);
-        });
+        if (err) {
+            console.error('Doing /user/info error:', err);
+            response.status(400).send(JSON.stringify(err));
+            return;
+        }
+        // console.log('User List ', userInfo);
+        response.status(200).send(userInfo);
+    });
 });
 
 /*
@@ -147,23 +147,23 @@ app.get('/user/list', function (request, response) {
 app.get('/user/:id', function (request, response) {
     var id = request.params.id;
     console.log("working");
-    User.find({_id: id}, function (err, userInfo) {
-            if (err) {
-                // Query returned an error.  We pass it back to the browser with an Internal Service
-                // Error (500) error code.
-                console.error('Doing /user/:id error:', err);
-                response.status(400).send(JSON.stringify(err));
-                return;
-            } 
-            if (userInfo.length === 0 || !userInfo) {
-                response.status(400).send("This user was not found");
-                return;
-            }
-            // console.log('User ID ', userInfo);
-            const user = JSON.parse(JSON.stringify(userInfo[0]));
-            //delete user.__v
-            response.status(200).send(user);
-        });
+    User.find({ _id: id }, function (err, userInfo) {
+        if (err) {
+            // Query returned an error.  We pass it back to the browser with an Internal Service
+            // Error (500) error code.
+            console.error('Doing /user/:id error:', err);
+            response.status(400).send(JSON.stringify(err));
+            return;
+        }
+        if (userInfo.length === 0 || !userInfo) {
+            response.status(400).send("This user was not found");
+            return;
+        }
+        // console.log('User ID ', userInfo);
+        const user = JSON.parse(JSON.stringify(userInfo[0]));
+        //delete user.__v
+        response.status(200).send(user);
+    });
 });
 
 /*
@@ -171,47 +171,26 @@ app.get('/user/:id', function (request, response) {
  */
 app.get('/photosOfUser/:id', function (request, response) {
     console.log('your grandma');
-    var id = request.params.id;
+    var user_id = request.params.id;
     // find photos 
-    Photo.find({_id: id}, function (err, userInfo) {
-        if (err) {
-            console.error('Doing /photosOfUser/:id error:', err);
-            response.status(400).send(JSON.stringify(err));
-            return;
-        } 
-        if (userInfo.length === 0 || !userInfo) {
-            response.status(400).send("User photos were not found");
-            return;
-        }
-        // array of all of the photo objects
-        const photos = JSON.parse(JSON.stringify(userInfo));
-        console.log('your sister');
-        // for each Photos elem in the array 
-        async.each(photos, function(photo, photoCallback){
-            const comments = photo.comments;
-            console.log('your brother');
-            // get the comments for that particular photo
-            async.each(comments, function(comment, commentCallback) {
-                const userID = comment.user_Id;
-                console.log('your dad');
-                User.find({_id: userID}, function(err, commentInfo){
-                    console.log('your mom');
-                    if (err) {
-                        console.error('async comment error:', err);
-                        response.status(400).send(JSON.stringify(err));
-                        return;
-                    } 
-                    if (!commentInfo || commentInfo.length === 0) {
-                        response.status(400).send("User comments were not found");
-                        return;
-                    }
-                    let user = JSON.parse(JSON.stringify(commentInfo));
-                    console.log('User here' + user);
-                });
-            });
-        });
-    });
-    response.status(200).send(photos);
+    Promise.all([
+        User.findById(user_id),
+        Photo.find({ user_id })
+    ])
+        .then(responses => {
+            console.log(responses[0]);
+            const photos = responses[1].map(photo => {
+                const p = { ...photo._doc };
+                const comments = p.comments.map(comment => {
+                    const com = { ...comment._doc };
+                    com.user = responses[0];
+                    return com;
+                })
+                p.comments = comments;
+                return p;
+            })
+            response.send(photos)
+        })
 });
 
 

@@ -3,9 +3,8 @@ import {
   List,
   ListItem,
 }
-from '@material-ui/core';
+  from '@material-ui/core';
 import './userList.css';
-import fetchModel from '../../lib/fetchModelData';
 import axios from 'axios'
 
 /**
@@ -17,23 +16,23 @@ class UserList extends React.Component {
     this.state = {
       users: [],
     };
-    
+
   }
-  componentDidUpdate() {
+  componentDidMount() {
     axios.get('/user/list')
-      .then(res => console.log(res))
+      .then(res => this.setState({ users: res.data }))
   }
 
   render() {
     let listOfUsers = this.state.users;
     // console.log('listOfUsers: ' + listOfUsers);
     let arrayOfUserNames = listOfUsers.map(user => {
-      return(
-      <a href={'#/users/' + user._id} key={user._id}>
-        <ListItem onClick={() => this.props.setName(user._id)}>
-          {user.first_name + " " + user.last_name}
-        </ListItem>
-      </a>
+      return (
+        <a href={'#/users/' + user._id} key={user._id}>
+          <ListItem onClick={() => this.props.setName(user)}>
+            {user.first_name + " " + user.last_name}
+          </ListItem>
+        </a>
       );
     });
 

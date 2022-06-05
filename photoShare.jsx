@@ -15,15 +15,12 @@ import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
 
 class PhotoShare extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state ={
-      name: '',
-    };
+
+  state = {
+    name: ''
   }
 
-  setName = (newName, showPhotos) => {
-    let user = window.cs142models.userModel(newName);
+  setName = (user, showPhotos) => {
     if (showPhotos) {
       this.setState({
         name: user.first_name + " " + user.last_name + "'s Photos",
@@ -36,7 +33,6 @@ class PhotoShare extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <HashRouter>
       <div>

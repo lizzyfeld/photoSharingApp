@@ -1,7 +1,7 @@
 import React from 'react';
 import './userDetail.css';
 import { Link } from 'react-router-dom';
-import fetchModel from '../../lib/fetchModelData';
+import axios from 'axios';
 
 
 /**
@@ -13,32 +13,21 @@ class UserDetail extends React.Component {
     this.state = {
       userDetails: null,
     };
-    console.log(this.props.match.params.userId);
-    // const promise = fetchModel(`/user/${this.props.match.params.userId}`);
-    // promise.then((response => {
-    //     this.setState({userDetails: JSON.parse(response.data)});
-    //     // this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
-    // })).catch(function(error) {
-    //   console.log(error);
-    // });
+  }
+
+  fetchUser() {
+    axios.get(`/user/${this.props.match.params.userId}`)
+      .then(res => this.setState({ userDetails: res.data }))
+      .catch(err => console.log(err))
   }
 
   // called whenever the page refreshes
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.match.params.userId !== this.props.match.params.userId) {
-      const promise = fetchModel(`/user/${this.props.match.params.userId}`);
-      promise.then((response => {
-          this.setState({userDetails: JSON.parse(response.data)});
-          // this.props.callback("userDetails", this.state.userDetails.first_name + " " + this.state.userDetails.last_name);
-      })).catch(function(error) {
-        console.log(error);
-      });
-    }
-  }
+  componentDidUpdate = prevProps => this.props.match.params.userId !== prevProps.match.params.userId && this.fetchUser();
+  componentDidMount = this.fetchUser;
 
   render() {
     let user = this.state.userDetails;
-    if(user){
+    if (user) {
       return (
         <div>
           <h1>{user.userfirst_name} {user.last_name}</h1>
